@@ -48,7 +48,7 @@ const Calculator = () => {
   };
 
   const handleInputChange = (key: keyof ParamsType, value: string) => {
-      if (value === "" || (Number(value) > 0 && !isNaN(Number(value)))) {
+    if (/^\d*\.?\d*$/.test(value) || value === "") {
        setParams(prev => ({ ...prev, [key]: value }));
     }
   };
@@ -58,38 +58,48 @@ const Calculator = () => {
       <h3>Расчёт массы</h3>
       {selectedShape.requiredParams.includes("firstSide") && (
       <input className='custom-input'
-          type="number"
+          type="text"
+          inputMode="decimal"
+          pattern="^\d*\.?\d*$"
           placeholder="Сторона 1, мм"
           value={params.firstSide}
           onChange={event => handleInputChange("firstSide", event.target.value)}
       />)}
       {selectedShape.requiredParams.includes("secondSide") && (
         <input className='custom-input'
-          type="number"
+          type="text"
+          inputMode="decimal"
+          pattern="^\d*\.?\d*$"
           placeholder="Сторона 2, мм"
           value={params.secondSide}
           onChange={event => handleInputChange("secondSide", event.target.value)}
       />)}
       {selectedShape.requiredParams.includes("diameter") && (
         <input className='custom-input'
-          type="number"
+          type="text"
+          inputMode="decimal"
+          pattern="^\d*\.?\d*$"
           placeholder="Диаметр, мм"
           value={params.diameter}
           onChange={event => handleInputChange("diameter", event.target.value)}
         />)}
       {selectedShape.requiredParams.includes("thickness") && (
         <input className='custom-input'
-          type="number"
-          placeholder="Толщина стенки, мм"
-          value={params.thickness}
-          onChange={event => handleInputChange("thickness", event.target.value)}
+           type="text"
+           inputMode="decimal"
+           pattern="^\d*\.?\d*$"
+           placeholder="Толщина стенки, мм"
+           value={params.thickness}
+           onChange={event => handleInputChange("thickness", event.target.value)}
         />)}
       {selectedShape.requiredParams.includes("materialLength") && (
         <input className='custom-input'
-          type="number"
-          placeholder="Длина, м"
-          value={params.materialLength}
-          onChange={event => handleInputChange("materialLength", event.target.value)}
+           type="text"
+           inputMode="decimal"
+           pattern="^\d*\.?\d*$"
+           placeholder="Длина, м"
+           value={params.materialLength}
+           onChange={event => handleInputChange("materialLength", event.target.value)}
         />)}
       <p>Масса: {calculateWeight()} кг</p>
     </div>
