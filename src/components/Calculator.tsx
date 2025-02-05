@@ -36,7 +36,7 @@ const Calculator = () => {
 
   const calculateWeight = () => {
     try {
-      const formula = selectedShape.formula.replace(/density/g, `${selectedMaterial.density}`);
+      const formula = selectedShape.formula.replace(/pi/g, `${Math.PI}`).replace(/density/g, `${selectedMaterial.density}`);
       const result = new Function(...Object.keys(params), `return ${formula}`)(...Object.values(params).map(v => Number(v) || 0)
       );
 
