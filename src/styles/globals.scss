@@ -2,8 +2,9 @@
 @import '_fonts';
 @import '_typography';
 @import 'media';
-@import '../pages/page';
+@import '../pages/Home/page';
 @import 'body';
-@import "../components/MaterialSelector";
-@import "../components/ShapeSelector";
-@import "../components/Calculator";
+@import "../components/MaterialSelector/MaterialSelector";
+@import "../components/ShapeSelector/ShapeSelector";
+@import "../components/Calculator/Calculator";
+@import '../pages/Contacts/Contacts';

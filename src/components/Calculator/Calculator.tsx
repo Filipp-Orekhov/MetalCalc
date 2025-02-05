@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
-import { RootState } from '../store/store';
+import { RootState } from '../../store/store.ts';
 import { useEffect, useState } from 'react';
-import '../styles/globals.scss'
+import '../../styles/globals.scss'
 
 const Calculator = () => {
   const { selectedShape, selectedMaterial } = useSelector((state: RootState) => state.metal);

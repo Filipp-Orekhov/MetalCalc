@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../store/store.ts';
-import { selectMaterial } from '../store/metalSlice.ts';
-import '../styles/globals.scss'
+import { RootState } from '../../store/store.ts';
+import { selectMaterial } from '../../store/metalSlice.ts';
+import '../../styles/globals.scss'
 
 const MaterialSelector = () => {
   const dispatch = useDispatch();
@@ -12,7 +12,7 @@ const MaterialSelector = () => {
     return null;
 
   return (
-    <div>
+    <div className='MaterialSelector'>
       <h3>Выберите материал</h3>
       <select  className='custom-select' value={selectedMaterial?.name || ""} onChange={e => dispatch(selectMaterial(e.target.value))}>
         <option className='option' value="">Выберите</option>
