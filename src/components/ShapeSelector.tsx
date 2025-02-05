@@ -2,6 +2,9 @@ import { useSelector, useDispatch} from 'react-redux';
 import { AppDispatch, RootState } from '../store/store';
 import { fetchShapes, selectShape } from '../store/metalSlice.ts';
 import { useEffect } from 'react';
+import '../styles/globals.scss'
+
+
 
 const ShapeSelector = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -14,7 +17,7 @@ const ShapeSelector = () => {
   return (
     <div>
       <h3>Вид проката</h3>
-      <select onChange={e => dispatch(selectShape(e.target.value))}>
+      <select className='custom-select' onChange={e => dispatch(selectShape(e.target.value))}>
         <option value="">Выберите</option>
         {shapes.map((shape) => (
           <option key={shape.id} value={shape.id}>{shape.name}</option>

@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { useEffect, useState } from 'react';
+import '../styles/globals.scss'
 
 const Calculator = () => {
   const { selectedShape, selectedMaterial } = useSelector((state: RootState) => state.metal);
@@ -51,37 +52,37 @@ const Calculator = () => {
     <div key={selectedShape.id} className="Calculator">
       <h3>Расчёт массы</h3>
       {selectedShape.requiredParams.includes("firstSide") && (
-      <input
+      <input className='custom-input'
         type="number"
-        placeholder="Сторона 1"
+        placeholder="Сторона 1, мм"
         value={params.firstSide}
         onChange={event => handleInputChange("firstSide", event.target.value)}
       />)}
       {selectedShape.requiredParams.includes("secondSide") && (
-        <input
+        <input className='custom-input'
         type="number"
-        placeholder="Сторона 2"
+        placeholder="Сторона 2, мм"
         value={params.secondSide}
         onChange={event => handleInputChange("secondSide", event.target.value)}
       />)}
       {selectedShape.requiredParams.includes("diameter") && (
-        <input
+        <input className='custom-input'
           type="number"
-          placeholder="Диаметр"
+          placeholder="Диаметр, мм"
           value={params.diameter}
           onChange={event => handleInputChange("diameter", event.target.value)}
         />)}
       {selectedShape.requiredParams.includes("thickness") && (
-        <input
+        <input className='custom-input'
           type="number"
-          placeholder="Толщина стенки"
+          placeholder="Толщина стенки, мм"
           value={params.thickness}
           onChange={event => handleInputChange("thickness", event.target.value)}
         />)}
       {selectedShape.requiredParams.includes("materialLength") && (
-        <input
+        <input className='custom-input'
           type="number"
-          placeholder="Длина"
+          placeholder="Длина, м"
           value={params.materialLength}
           onChange={event => handleInputChange("materialLength", event.target.value)}
         />)}

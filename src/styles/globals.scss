@@ -2,4 +2,8 @@
 @import '_fonts';
 @import '_typography';
 @import 'media';
-@import 'page';
+@import '../pages/page';
+@import 'body';
+@import "../components/MaterialSelector";
+@import "../components/ShapeSelector";
+@import "../components/Calculator";
