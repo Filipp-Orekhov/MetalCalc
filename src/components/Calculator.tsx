@@ -37,7 +37,10 @@ const Calculator = () => {
   const calculateWeight = () => {
     try {
       const formula = selectedShape.formula.replace(/density/g, `${selectedMaterial.density}`);
-      const result = new Function(...Object.keys(params), `return ${formula}`)(...Object.values(params).map(v => Number(v) || 0));
+      const result = new Function(...Object.keys(params), `return ${formula}`)(...Object.values(params).map(v => Number(v) || 0)
+      );
+
+      if (result < 0) return "Проверьте данные";
       return result.toFixed(2);
     } catch {
       return "Ошибка";
@@ -45,7 +48,9 @@ const Calculator = () => {
   };
 
   const handleInputChange = (key: keyof ParamsType, value: string) => {
-    setParams(prev => ({ ...prev, [key]: value }));
+      if (value === "" || (Number(value) > 0 && !isNaN(Number(value)))) {
+       setParams(prev => ({ ...prev, [key]: value }));
+    }
   };
 
   return (
@@ -53,17 +58,17 @@ const Calculator = () => {
       <h3>Расчёт массы</h3>
       {selectedShape.requiredParams.includes("firstSide") && (
       <input className='custom-input'
-        type="number"
-        placeholder="Сторона 1, мм"
-        value={params.firstSide}
-        onChange={event => handleInputChange("firstSide", event.target.value)}
+          type="number"
+          placeholder="Сторона 1, мм"
+          value={params.firstSide}
+          onChange={event => handleInputChange("firstSide", event.target.value)}
       />)}
       {selectedShape.requiredParams.includes("secondSide") && (
         <input className='custom-input'
-        type="number"
-        placeholder="Сторона 2, мм"
-        value={params.secondSide}
-        onChange={event => handleInputChange("secondSide", event.target.value)}
+          type="number"
+          placeholder="Сторона 2, мм"
+          value={params.secondSide}
+          onChange={event => handleInputChange("secondSide", event.target.value)}
       />)}
       {selectedShape.requiredParams.includes("diameter") && (
         <input className='custom-input'
