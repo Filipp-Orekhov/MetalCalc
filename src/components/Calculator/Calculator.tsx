@@ -1,7 +1,9 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store.ts';
 import { useEffect, useState } from 'react';
-import '../../styles/globals.scss'
+import '../../styles/globals.scss';
+import style from "./style.module.scss";
+
 
 const Calculator = () => {
   const { selectedShape, selectedMaterial } = useSelector((state: RootState) => state.metal);
@@ -87,7 +89,7 @@ const Calculator = () => {
   const weight = calculateWeight();
 
   return (
-    <div key={selectedShape.id} className="Calculator">
+    <div key={selectedShape.id} className={style.Calculator}>
       <h3>Расчёт массы</h3>
       {selectedShape.requiredParams.includes("firstSide") && (
       <input className='custom-input'
