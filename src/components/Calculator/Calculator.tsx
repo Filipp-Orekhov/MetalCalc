@@ -44,13 +44,11 @@ const Calculator = () => {
 
       const { thickness, diameter, firstSide, secondSide, materialLength } = params;
 
-      // Проверка: если какое-то поле (кроме диаметра) заполнено, но <= 0, то ошибка
       const filledValues = [thickness, materialLength].filter(val => val !== "");
       if (filledValues.some(val => Number(val) <= 0)) {
         return "Введите корректные данные";
       }
 
-      // Проверка для firstSide и secondSide (если оба нужны, но один отсутствует)
       if (selectedShape.requiredParams.includes("firstSide") &&
         selectedShape.requiredParams.includes("secondSide") &&
         (!firstSide || !secondSide)) {
@@ -65,7 +63,6 @@ const Calculator = () => {
         return `Сторона  ${secondSide} мм слишком мала для стенки ${thickness} мм`;
       }
 
-      // Проверка для диаметра
       if (Number(diameter) > 0 && Number(thickness) > 0 && Number(diameter) <= 2 * Number(thickness)) {
         return `Диаметр ${diameter} мм слишком мал для стенки ${thickness} мм`;
       }
