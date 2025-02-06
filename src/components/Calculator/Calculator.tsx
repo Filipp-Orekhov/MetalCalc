@@ -36,22 +36,55 @@ const Calculator = () => {
 
   const calculateWeight = () => {
     try {
-      const formula = selectedShape.formula.replace(/pi/g, `${Math.PI}`).replace(/density/g, `${selectedMaterial.density}`);
-      const result = new Function(...Object.keys(params), `return ${formula}`)(...Object.values(params).map(v => Number(v) || 0)
+      const formula = selectedShape.formula
+        .replace(/pi/g, `${Math.PI}`)
+        .replace(/density/g, `${selectedMaterial.density}`);
+
+      const { thickness, diameter, firstSide, secondSide, materialLength } = params;
+
+      // Проверка: если какое-то поле (кроме диаметра) заполнено, но <= 0, то ошибка
+      const filledValues = [thickness, materialLength].filter(val => val !== "");
+      if (filledValues.some(val => Number(val) <= 0)) {
+        return "Введите корректные данные";
+      }
+
+      // Проверка для firstSide и secondSide (если оба нужны, но один отсутствует)
+      if (selectedShape.requiredParams.includes("firstSide") &&
+        selectedShape.requiredParams.includes("secondSide") &&
+        (!firstSide || !secondSide)) {
+        return "Введите обе стороны";
+      }
+
+      if (Number(firstSide) > 0 && Number(thickness) > 0 && Number(firstSide) <= 2 * Number(thickness)) {
+        return `Сторона  ${firstSide} мм слишком мала для стенки ${thickness} мм`;
+      }
+
+      if (Number(secondSide) > 0 && Number(thickness) > 0 && Number(secondSide) <= 2 * Number(thickness)) {
+        return `Сторона  ${secondSide} мм слишком мала для стенки ${thickness} мм`;
+      }
+
+      // Проверка для диаметра
+      if (Number(diameter) > 0 && Number(thickness) > 0 && Number(diameter) <= 2 * Number(thickness)) {
+        return `Диаметр ${diameter} мм слишком мал для стенки ${thickness} мм`;
+      }
+
+      const result = new Function(...Object.keys(params), `return ${formula}`)(
+        ...Object.values(params).map(v => Number(v) || 0)
       );
 
-      if (result < 0) return "Проверьте данные";
-      return result.toFixed(2);
+      return result > 0 ? result.toFixed(2) : "0.00";
     } catch {
       return "Ошибка";
     }
   };
 
   const handleInputChange = (key: keyof ParamsType, value: string) => {
-    if (/^\d*\.?\d*$/.test(value) || value === "") {
-       setParams(prev => ({ ...prev, [key]: value }));
+    if (value === "" || (/^\d*\.?\d*$/.test(value) && Number(value) > 0)) {
+      setParams(prev => ({ ...prev, [key]: value }));
     }
   };
+
+  const weight = calculateWeight();
 
   return (
     <div key={selectedShape.id} className="Calculator">
@@ -101,7 +134,11 @@ const Calculator = () => {
            value={params.materialLength}
            onChange={event => handleInputChange("materialLength", event.target.value)}
         />)}
-      <p>Масса: {calculateWeight()} кг</p>
+        {isNaN(Number(weight)) || weight === "Введите корректные данные" || weight === "Введите обе стороны" || weight.includes("Диаметр слишком мал") ? (
+        <p>{weight}</p>
+      ) : (
+        <p>Масса: {weight} кг</p>
+      )}
     </div>
   );
 };
