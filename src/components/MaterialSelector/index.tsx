@@ -13,7 +13,6 @@ const MaterialSelector = () => {
 
   if (!selectedShape) return null;
 
-  // Получаем список материалов по materialIds
   const availableMaterials = selectedShape.materialIds
     .map((id) => allMaterials.find((mat) => mat.id === id))
     .filter((mat): mat is NonNullable<typeof mat> => !!mat);

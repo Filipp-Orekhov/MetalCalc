@@ -55,7 +55,7 @@ const metalSlice = createSlice({
     setSelectedShape(state, action: PayloadAction<String>) {
       const shapeId = action.payload;
       state.selectedShape = state.shapes.find((s) => s.id === shapeId) || null;
-      state.selectedMaterial = null; // Можно сбрасывать выбранный материал при смене формы
+      state.selectedMaterial = null;
     },
   },
   extraReducers: (builder) => {
