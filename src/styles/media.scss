@@ -19,8 +19,7 @@
     @media (max-width: 1280px) {
       @content;
     }
-  }
-  @else if $size ==xxl {
+  } @else if $size ==xxl {
     @media (max-width: 1600px) {
       @content;
     }

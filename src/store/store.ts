@@ -5,7 +5,7 @@ import metalReducer from './metalSlice';
 const store = configureStore({
   reducer: {
     metal: metalReducer,
-  }
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

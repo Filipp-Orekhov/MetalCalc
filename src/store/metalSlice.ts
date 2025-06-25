@@ -1,7 +1,7 @@
-import { createSlice , createAsyncThunk , PayloadAction } from "@reduxjs/toolkit";
-import { fetchShapesApi } from '../api/api.ts';
-
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { fetchMetalDataApi } from '../api/api.ts';
 export interface Material {
+  id: string;
   name: string;
   density: number;
 }
@@ -11,7 +11,7 @@ export interface Shape {
   name: string;
   requiredParams: string[];
   formula: string;
-  materials: Material[];
+  materialIds: string[];
 }
 
 interface MetalState {
@@ -20,6 +20,7 @@ interface MetalState {
   error: string | null;
   selectedShape: Shape | null;
   selectedMaterial: Material | null;
+  materials: Material[];
 }
 
 const initialState: MetalState = {
@@ -28,53 +29,55 @@ const initialState: MetalState = {
   error: null,
   selectedShape: null,
   selectedMaterial: null,
+  materials: [],
 };
 
-export const fetchShapes = createAsyncThunk<Shape[]>('metal/fetchShapes', async () => {
-  return await fetchShapesApi();
+export const fetchMetalData = createAsyncThunk('metal/fetchMetalData', async (_, thunkAPI) => {
+  try {
+    const data = await fetchMetalDataApi();
+    return data; // ожидаем { shapes, materials }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+    return thunkAPI.rejectWithValue('Ошибка при загрузке данных');
+  }
 });
 
 const metalSlice = createSlice({
   name: 'metal',
   initialState,
   reducers: {
-    selectShape: (state, action: PayloadAction<string>) => {
-      const newShape = state.shapes.find(shape => shape.id === action.payload) || null;
-
-      if (newShape && state.selectedMaterial) {
-        const isMaterialValid = newShape.materials.some(m => m.name === state.selectedMaterial?.name);
-        if (!isMaterialValid) {
-          state.selectedMaterial = null;
-        }
-      } else {
-        state.selectedMaterial = null;
-      }
-
-      state.selectedShape = newShape;
+    setSelectedMaterial(state, action: PayloadAction<String>) {
+      const materialId = action.payload;
+      state.selectedMaterial = state.materials.find((m) => m.id === materialId) || null;
     },
-    selectMaterial: (state, action: PayloadAction<string>) => {
-      if (state.selectedShape) {
-        state.selectedMaterial = state.selectedShape.materials.find(material => material.name === action.payload) || null;
-      }
+    setSelectedShape(state, action: PayloadAction<String>) {
+      const shapeId = action.payload;
+      state.selectedShape = state.shapes.find((s) => s.id === shapeId) || null;
+      state.selectedMaterial = null; // Можно сбрасывать выбранный материал при смене формы
     },
   },
-  extraReducers: builder => {
+  extraReducers: (builder) => {
     builder
-      .addCase(fetchShapes.pending, state => {
+      .addCase(fetchMetalData.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchShapes.fulfilled, (state, action) => {
+      .addCase(
+        fetchMetalData.fulfilled,
+        (state, action: PayloadAction<{ shapes: Shape[]; materials: Material[] }>) => {
+          state.loading = false;
+          state.shapes = action.payload.shapes;
+          state.materials = action.payload.materials;
+        },
+      )
+      .addCase(fetchMetalData.rejected, (state, action) => {
         state.loading = false;
-        state.shapes = action.payload;
-      })
-      .addCase(fetchShapes.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || 'Не удалось загрузить данные';
+        state.error = action.payload as string;
       });
   },
 });
 
-export const { selectShape, selectMaterial } = metalSlice.actions;
+export const { setSelectedMaterial, setSelectedShape } = metalSlice.actions;
 export default metalSlice.reducer;
-

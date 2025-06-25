@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Home from './pages/Home/Home.tsx';
 import Contacts from './pages/Contacts/Contacts.tsx';
-import './styles/globals.scss'
+import './styles/globals.scss';
 
 const App = () => (
   <div className="App">
-    <Router>
+    <Router basename="/MetalCalc">
       <Routes>
         <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/home" element={<Home />} />
