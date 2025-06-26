@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../store/store';
-import { selectSelectedMaterial, selectSelectedShape } from '../../store/selectors';
+import { selectAllMaterials, selectSelectedMaterial, selectSelectedShape } from '../../store/selectors';
 import { setSelectedMaterial } from '../../store/metalSlice';
 import style from './style.module.scss';
 
@@ -9,7 +8,7 @@ const MaterialSelector = () => {
   const dispatch = useDispatch();
   const selectedShape = useSelector(selectSelectedShape);
   const selectedMaterial = useSelector(selectSelectedMaterial);
-  const allMaterials = useSelector((state: RootState) => state.metal.materials);
+  const allMaterials = useSelector(selectAllMaterials);
 
   if (!selectedShape) return null;
 
